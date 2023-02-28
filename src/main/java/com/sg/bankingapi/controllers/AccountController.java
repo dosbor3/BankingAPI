@@ -23,10 +23,10 @@ public class AccountController {
     }
 
     @GetMapping(ACCOUNTS)
-    public String displayAccounts(Model model) {
+    public List displayAccounts(Model model) {
         List<Account> accounts = accountDao.getAllAccounts();
         model.addAttribute("accounts", accounts);
-        return ACCOUNTS;
+        return accounts;
     }
-
+//for tomorrow.. start reading Spring Boot with Thymeleaf to gain an understanding of
 }
