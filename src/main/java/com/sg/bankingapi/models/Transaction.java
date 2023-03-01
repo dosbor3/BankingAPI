@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class Transactions {
+public class Transaction {
     private int trans_id;
     private int account_number;
     private int customer_number;
@@ -14,10 +14,6 @@ public class Transactions {
     private BigDecimal withdrawl_amount;
     private BigDecimal total;
     private boolean pending_flag;
-
-    public Transactions(int trans_id) {
-        this.trans_id = trans_id;
-    }
 
 
     public int getTrans_id() {
@@ -88,7 +84,7 @@ public class Transactions {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Transactions that = (Transactions) o;
+        Transaction that = (Transaction) o;
         return trans_id == that.trans_id && account_number == that.account_number && customer_number == that.customer_number && account_type == that.account_type && pending_flag == that.pending_flag && Objects.equals(trans_date, that.trans_date) && Objects.equals(deposit_amount, that.deposit_amount) && Objects.equals(withdrawl_amount, that.withdrawl_amount) && Objects.equals(total, that.total);
     }
 
@@ -99,7 +95,7 @@ public class Transactions {
 
     @Override
     public String toString() {
-        return "Transactions{" +
+        return "Transaction{" +
                 "trans_id='" + trans_id + '\'' +
                 ", account_number='" + account_number + '\'' +
                 ", customer_number='" + customer_number + '\'' +

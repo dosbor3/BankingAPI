@@ -3,7 +3,11 @@ import java.util.Objects;
 
 public class Customer {
     private int customer_number;
+    //@NotBlank(message = "First name must not be empty")
+    //@Size(max = 50, message = "First name must not exceed 50 characters")
     private String first_name;
+    //@NotBlank(message = "Last name must not be empty")
+    //@Size(max = 50, message = "Last name must not exceed 50 characters")
     private String last_name;
     private int address_id;
     private String phone;
@@ -11,11 +15,13 @@ public class Customer {
     private boolean isActive;
 
 
-    public Customer(int customer_number) {
+    public Customer() {
         this.customer_number = customer_number;
     }
 
-
+    public void setCustomerNumber(int customer_number) {
+        this.customer_number = customer_number;
+    }
     public int getCustomer_number() {
         return customer_number;
     }

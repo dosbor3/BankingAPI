@@ -14,17 +14,20 @@ import java.sql.SQLException;
 import java.util.List;
 
 @Repository
-public class AccountDaoImpl implements AccountDao {
+public class AccountDaoDB implements AccountDao {
+    //What happens if I place @Autowired here instead of with the constructor?
+    //Say, JdbcTemplate jdbc; and not pass into constructor???
+
     private final JdbcTemplate jdbc;
 
     @Autowired
-    public AccountDaoImpl(JdbcTemplate jdbc) {
+    public AccountDaoDB(JdbcTemplate jdbc) {
         this.jdbc = jdbc;
     }
     @Override
     public Account getAccountByAccountNumber(int account_number) {
         try {
-            final String GET_ACCT_BY_ACCT_NO = "SELECT * FROM Account WHERE Account_number = ?";
+            final String GET_ACCT_BY_ACCT_NO = "SELECT * FROM Account WHERE account_number = ?";
             Account account = jdbc.queryForObject(GET_ACCT_BY_ACCT_NO, new AccountMapper(), account_number);
             return account;
 
@@ -36,7 +39,7 @@ public class AccountDaoImpl implements AccountDao {
     @Override
     public Account getAccountByCustomerNumber(int customer_number) {
         try {
-            final String GET_ACCT_BY_CUST_NO = "SELECT * FROM Account WHERE Customer_number = ?";
+            final String GET_ACCT_BY_CUST_NO = "SELECT * FROM Account WHERE customer_number = ?";
             Account account = jdbc.queryForObject(GET_ACCT_BY_CUST_NO, new AccountMapper(), customer_number);
             return account;
 
@@ -48,7 +51,7 @@ public class AccountDaoImpl implements AccountDao {
     @Override
     @Transactional
     public Account addAccount(Account account) {
-        final String INSERT_ACCOUNT = "INSERT INTO Account(Customer_number, Current_balance, Available_balance, Account_type, IsActive) VALUES(?,?,?,?,?)";
+        final String INSERT_ACCOUNT = "INSERT INTO Account(customer_number, current_balance, available_balance, account_type, isActive) VALUES(?,?,?,?,?)";
 
         jdbc.update(INSERT_ACCOUNT,
                 account.getCustomer_number(),
@@ -71,7 +74,7 @@ public class AccountDaoImpl implements AccountDao {
 
     @Override
     public BigDecimal getAvailableBalance(int account_number) {
-        final String GET_AVAIL_BAL = "SELECT * FROM Account WHERE Account_number = ?";
+        final String GET_AVAIL_BAL = "SELECT * FROM Account WHERE account_number = ?";
         Account account = jdbc.queryForObject(GET_AVAIL_BAL, new AccountMapper(), account_number);
 
         return account.getAvailable_balance();
@@ -79,7 +82,7 @@ public class AccountDaoImpl implements AccountDao {
 
     @Override
     public BigDecimal getCurrentBalance(int account_number) {
-        final String GET_CURR_BAL = "SELECT * FROM Account WHERE Account_number = ?";
+        final String GET_CURR_BAL = "SELECT * FROM Account WHERE account_number = ?";
         Account account = jdbc.queryForObject(GET_CURR_BAL, new AccountMapper(), account_number);
 
         return account.getCurrent_balance();
@@ -87,7 +90,7 @@ public class AccountDaoImpl implements AccountDao {
 
     @Override
     public void updateAccount(Account account) {
-        final String UPDATE_ACCOUNT = "UPDATE Account SET Customer_number, Account_type, IsActive) VALUES(?,?,?)";
+        final String UPDATE_ACCOUNT = "UPDATE Account SET customer_number, account_type, isActive) VALUES(?,?,?)";
 
         jdbc.update(UPDATE_ACCOUNT,
                 account.getCustomer_number(),
@@ -99,7 +102,10 @@ public class AccountDaoImpl implements AccountDao {
     @Override
     @Transactional //future production setup
     public void deleteAccountByAccountNumber(String account_number) {
-        final String DELETE_ACCOUNT = "DELETE FROM Account WHERE Account_number = ?";
+        final String DELETE_TRANSACTION = "DELETE FROM Transaction WHERE account_number = ?";
+        jdbc.update(DELETE_TRANSACTION, account_number);
+
+        final String DELETE_ACCOUNT = "DELETE FROM Account WHERE account_number = ?";
         jdbc.update(DELETE_ACCOUNT, account_number);
     }
 
@@ -107,17 +113,17 @@ public class AccountDaoImpl implements AccountDao {
         @Override
         public Account mapRow(ResultSet rs, int rowNum) throws SQLException, SQLException {
             Account account = new Account();
-            account.setAccount_number(rs.getInt("Account_number"));
-            account.setCustomer_number(rs.getInt("Customer_number"));
+            account.setAccount_number(rs.getInt("account_number"));
+            account.setCustomer_number(rs.getInt("customer_number"));
 
-            BigDecimal curBal = new BigDecimal(String.valueOf(rs.getDouble("Current_balance")));
+            BigDecimal curBal = new BigDecimal(String.valueOf(rs.getDouble("current_balance")));
             account.setCurrent_balance(curBal);
 
             BigDecimal availableBal = new BigDecimal(String.valueOf(rs.getDouble("available_balance")));
             account.setAvailable_balance(availableBal);
 
-            account.setAccount_type(rs.getInt("Account_type"));
-            account.setActive(rs.getBoolean("IsActive"));
+            account.setAccount_type(rs.getInt("account_type"));
+            account.setActive(rs.getBoolean("isActive"));
             return account;
         }
     }
