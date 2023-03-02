@@ -51,7 +51,7 @@ public class CustomerAddressDaoDB implements CustomerAddressDao {
         final String INSERT_ADDRESS = "INSERT INTO Address(street, city, state, zipcode) "
                 + "VALUES(?,?,?,?)";
         jdbc.update(INSERT_ADDRESS,
-                address.getState(),
+                address.getStreet(),
                 address.getCity(),
                 address.getState(),
                 address.getZipcode());
@@ -82,6 +82,9 @@ public class CustomerAddressDaoDB implements CustomerAddressDao {
     @Override
     @Transactional
     public void deleteAddressById(int address_id) {
+        final String DELETE_CUSTOMER = "DELETE FROM Customer WHERE address_id = ?";
+        jdbc.update(DELETE_CUSTOMER, address_id);
+
         final String DELETE_ADDRESS = "DELETE FROM Address WHERE address_id = ?";
         jdbc.update(DELETE_ADDRESS, address_id);
     }
@@ -91,7 +94,7 @@ public class CustomerAddressDaoDB implements CustomerAddressDao {
         public Address mapRow(ResultSet rs, int rowNum) throws SQLException {
             Address address = new Address();
             address.setAddress_id(rs.getInt("address_id"));
-            address.setState(rs.getString("street"));
+            address.setStreet(rs.getString("street"));
             address.setCity(rs.getString("city"));
             address.setState(rs.getString("state"));
             address.setZipcode(rs.getString("zipcode"));

@@ -10,8 +10,8 @@ public interface AccountDao {
     Account getAccountByCustomerNumber(int customer_number);
     Account addAccount(Account account);
     List<Account> getAllAccounts();
-    BigDecimal getAvailableBalance(int account_number);
-    BigDecimal getCurrentBalance(int account_number);
+    Account getAvailableBalance(int account_number);
+    Account getCurrentBalance(int account_number);
     void updateAccount(Account account);
     void deleteAccountByAccountNumber(int account_number);
 

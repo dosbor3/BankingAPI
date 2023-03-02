@@ -5,18 +5,18 @@ import java.util.Objects;
 public class Account {
     private int account_number;
     private int customer_number;
-    private BigDecimal current_balance;
-    private BigDecimal available_balance;
+    private double current_balance;
+    private double available_balance;
     private int account_category;
     private boolean isActive;
     public int getAccount_number() { return account_number; }
     public void setAccount_number(int account_number) { this.account_number = account_number; }
     public int getCustomer_number() { return customer_number; }
     public void setCustomer_number(int customer_number) { this.customer_number = customer_number; }
-    public BigDecimal getCurrent_balance() { return current_balance; }
-    public void setCurrent_balance(BigDecimal current_balance) { this.current_balance = current_balance; }
-    public BigDecimal getAvailable_balance() { return available_balance; }
-    public void setAvailable_balance(BigDecimal available_balance) { this.available_balance = available_balance; }
+    public double getCurrent_balance() { return current_balance; }
+    public void setCurrent_balance(double current_balance) { this.current_balance = current_balance; }
+    public double getAvailable_balance() { return available_balance; }
+    public void setAvailable_balance(double available_balance) { this.available_balance = available_balance; }
     public int getAccount_category() { return account_category; }
     public void setAccount_category(int account_category) { this.account_category = account_category; }
     public boolean isActive() { return isActive; }

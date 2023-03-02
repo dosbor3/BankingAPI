@@ -51,15 +51,15 @@ public class AccountDaoDB implements AccountDao {
     @Override
     @Transactional
     public Account addAccount(Account account) {
-        final String INSERT_ACCOUNT = "INSERT INTO Account(customer_number, current_balance, available_balance, account_type, isActive) VALUES(?,?,?,?,?)";
+        final String INSERT_ACCOUNT = "INSERT INTO Account(customer_number, current_balance, available_balance," +
+                "account_category, isActive) VALUES(?,?,?,?,?)";
 
         jdbc.update(INSERT_ACCOUNT,
                 account.getCustomer_number(),
                 account.getCurrent_balance(),
                 account.getAvailable_balance(),
                 account.getAccount_category(),
-                account.isActive()
-                );
+                account.isActive());
 
         int newId = jdbc.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
         account.setAccount_number(newId);
@@ -73,28 +73,27 @@ public class AccountDaoDB implements AccountDao {
     }
 
     @Override
-    public BigDecimal getAvailableBalance(int account_number) {
+    public Account getAvailableBalance(int account_number) {
         final String GET_AVAIL_BAL = "SELECT * FROM Account WHERE account_number = ?";
-        Account account = jdbc.queryForObject(GET_AVAIL_BAL, new AccountMapper(), account_number);
-
-        return account.getAvailable_balance();
+        return jdbc.queryForObject(GET_AVAIL_BAL, new AccountMapper(), account_number);
     }
 
     @Override
-    public BigDecimal getCurrentBalance(int account_number) {
+    public Account getCurrentBalance(int account_number) {
         final String GET_CURR_BAL = "SELECT * FROM Account WHERE account_number = ?";
-        Account account = jdbc.queryForObject(GET_CURR_BAL, new AccountMapper(), account_number);
-
-        return account.getCurrent_balance();
+        return jdbc.queryForObject(GET_CURR_BAL, new AccountMapper(), account_number);
     }
 
     @Override
     public void updateAccount(Account account) {
-        final String UPDATE_ACCOUNT = "UPDATE Account SET customer_number = ?, account_type = ?, isActive = ?) " +
+        final String UPDATE_ACCOUNT = "UPDATE Account SET customer_number = ?, current_balance = ?, available_balance = ?, "
+                + "account_category = ?, isActive = ? " +
                 "WHERE account_number = ?";
 
         jdbc.update(UPDATE_ACCOUNT,
                 account.getCustomer_number(),
+                account.getCurrent_balance(),
+                account.getAvailable_balance(),
                 account.getAccount_category(),
                 account.isActive(),
                 account.getAccount_number());
@@ -116,14 +115,9 @@ public class AccountDaoDB implements AccountDao {
             Account account = new Account();
             account.setAccount_number(rs.getInt("account_number"));
             account.setCustomer_number(rs.getInt("customer_number"));
-
-            BigDecimal curBal = new BigDecimal(String.valueOf(rs.getDouble("current_balance")));
-            account.setCurrent_balance(curBal);
-
-            BigDecimal availableBal = new BigDecimal(String.valueOf(rs.getDouble("available_balance")));
-            account.setAvailable_balance(availableBal);
-
-            account.setAccount_category(rs.getInt("account_type"));
+            account.setCurrent_balance (rs.getDouble("current_balance"));
+            account.setAvailable_balance(rs.getDouble("available_balance"));
+            account.setAccount_category(rs.getInt("account_category"));
             account.setActive(rs.getBoolean("isActive"));
             return account;
         }

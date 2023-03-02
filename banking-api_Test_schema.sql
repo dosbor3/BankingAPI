@@ -4,7 +4,6 @@ CREATE DATABASE bankingApiDBTest;
 
 USE bankingApiDBTest;
 
-
 CREATE TABLE Address (
 	address_id INT PRIMARY KEY AUTO_INCREMENT,
 	street VARCHAR(75),
@@ -51,6 +50,7 @@ CREATE TABLE Transaction (
 CREATE TABLE Account_Customer(
 	account_number INT NOT NULL, 
     customer_number INT NOT NULL, 
+    trans_type INT,
     PRIMARY KEY(account_number, customer_number),
     FOREIGN KEY (account_number) REFERENCES Account(account_number),
     FOREIGN KEY (customer_number) REFERENCES Customer(customer_number)

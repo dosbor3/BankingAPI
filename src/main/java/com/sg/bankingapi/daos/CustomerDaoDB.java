@@ -39,7 +39,7 @@ public class CustomerDaoDB implements CustomerDao{
      */
     @Override
     public List getAllCustomers() {
-        final String GET_ALL_CUSTOMERS = "SELECT * FROM Customers";
+        final String GET_ALL_CUSTOMERS = "SELECT * FROM Customer";
         return jdbc.query(GET_ALL_CUSTOMERS, new CustomerMapper());
     }
 
@@ -50,7 +50,8 @@ public class CustomerDaoDB implements CustomerDao{
     @Override
     @Transactional
     public Customer addCustomer(Customer customer) {
-        final String INSERT_CUSTOMER = "INSERT into Customer(first_name, last_name, address_id, phone, email, isActive)";
+        final String INSERT_CUSTOMER = "INSERT INTO Customer(first_name, last_name, address_id, phone, email, isActive)" +
+                " VALUES(?,?,?,?,?,?)";
         jdbc.update(INSERT_CUSTOMER,
                 customer.getFirst_name(),
                 customer.getLast_name(),
@@ -84,14 +85,9 @@ public class CustomerDaoDB implements CustomerDao{
     @Override
     @Transactional
     public void deleteCustomerById(int cust_number) {
-        final String DELETE_ACCOUNT = "DELETE * FROM Account WHERE customer_number = ?";
+
+        final String DELETE_ACCOUNT = "DELETE FROM Account WHERE customer_number = ?";
         jdbc.update(DELETE_ACCOUNT, cust_number);
-
-        final String DELETE_ADDRESS = "DELETE * FROM Address WHERE customer_number = ?";
-        jdbc.update(DELETE_ADDRESS, cust_number);
-
-        final String DELETE_TRANSACTIONS = "DELETE * FROM Transaction WHERE customer_number = ? ";
-        jdbc.update(DELETE_TRANSACTIONS, cust_number);
     }
 
     public static final class CustomerMapper implements RowMapper<Customer> {

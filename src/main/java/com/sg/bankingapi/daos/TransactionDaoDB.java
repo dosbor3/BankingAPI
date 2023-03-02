@@ -22,7 +22,7 @@ public class TransactionDaoDB implements TransactionDao {
     @Override
     public Transaction getTransactionById(int trans_id) {
         try {
-            final String GET_TRANS_BY_ID = "SELECT * FROM Transactions WHERE trans_id = ?";
+            final String GET_TRANS_BY_ID = "SELECT * FROM Transaction WHERE trans_id = ?";
             return jdbc.queryForObject(GET_TRANS_BY_ID, new TransactionMapper(), trans_id);
 
         }catch (DataAccessException ex) {
@@ -32,7 +32,7 @@ public class TransactionDaoDB implements TransactionDao {
 
     @Override
     public List<Transaction> getAllTransactions() {
-        final String GET_ALL_ACCT_TRANS = "SELECT * FROM Transactions";
+        final String GET_ALL_ACCT_TRANS = "SELECT * FROM Transaction";
         return jdbc.query(GET_ALL_ACCT_TRANS, new TransactionMapper());
     }
 
