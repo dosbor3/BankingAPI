@@ -85,9 +85,11 @@ public class CustomerDaoDB implements CustomerDao{
     @Override
     @Transactional
     public void deleteCustomerById(int cust_number) {
+        final String DELETE_ACCOUNT_OF_CUSTOMER = "DELETE FROM Account WHERE customer_number = ?";
+        jdbc.update(DELETE_ACCOUNT_OF_CUSTOMER, cust_number);
 
-        final String DELETE_ACCOUNT = "DELETE FROM Account WHERE customer_number = ?";
-        jdbc.update(DELETE_ACCOUNT, cust_number);
+        final String DELETE_CUSTOMER = "DELETE FROM Customer WHERE customer_number = ?";
+        jdbc.update(DELETE_CUSTOMER, cust_number);
     }
 
     public static final class CustomerMapper implements RowMapper<Customer> {

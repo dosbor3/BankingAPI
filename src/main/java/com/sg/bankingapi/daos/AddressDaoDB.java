@@ -13,10 +13,10 @@ import java.sql.SQLException;
 import java.util.List;
 
 @Repository
-public class CustomerAddressDaoDB implements CustomerAddressDao {
+public class AddressDaoDB implements AddressDao {
     private final JdbcTemplate jdbc;
     @Autowired
-    public CustomerAddressDaoDB(JdbcTemplate jdbc) {this.jdbc = jdbc; }
+    public AddressDaoDB(JdbcTemplate jdbc) {this.jdbc = jdbc; }
     /**
      * @param address_id
      * @return

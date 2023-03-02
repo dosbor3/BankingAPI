@@ -4,7 +4,7 @@ import com.sg.bankingapi.models.Address;
 
 import java.util.List;
 
-public interface CustomerAddressDao {
+public interface AddressDao {
     /**
      *
      * @param address_id
