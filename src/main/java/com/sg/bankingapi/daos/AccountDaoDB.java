@@ -57,7 +57,7 @@ public class AccountDaoDB implements AccountDao {
                 account.getCustomer_number(),
                 account.getCurrent_balance(),
                 account.getAvailable_balance(),
-                account.getAccount_type(),
+                account.getAccount_category(),
                 account.isActive()
                 );
 
@@ -90,18 +90,19 @@ public class AccountDaoDB implements AccountDao {
 
     @Override
     public void updateAccount(Account account) {
-        final String UPDATE_ACCOUNT = "UPDATE Account SET customer_number, account_type, isActive) VALUES(?,?,?)";
+        final String UPDATE_ACCOUNT = "UPDATE Account SET customer_number = ?, account_type = ?, isActive = ?) " +
+                "WHERE account_number = ?";
 
         jdbc.update(UPDATE_ACCOUNT,
                 account.getCustomer_number(),
-                account.getAccount_type(),
-                account.isActive()
-        );
+                account.getAccount_category(),
+                account.isActive(),
+                account.getAccount_number());
     }
 
     @Override
     @Transactional //future production setup
-    public void deleteAccountByAccountNumber(String account_number) {
+    public void deleteAccountByAccountNumber(int account_number) {
         final String DELETE_TRANSACTION = "DELETE FROM Transaction WHERE account_number = ?";
         jdbc.update(DELETE_TRANSACTION, account_number);
 
@@ -122,7 +123,7 @@ public class AccountDaoDB implements AccountDao {
             BigDecimal availableBal = new BigDecimal(String.valueOf(rs.getDouble("available_balance")));
             account.setAvailable_balance(availableBal);
 
-            account.setAccount_type(rs.getInt("account_type"));
+            account.setAccount_category(rs.getInt("account_type"));
             account.setActive(rs.getBoolean("isActive"));
             return account;
         }

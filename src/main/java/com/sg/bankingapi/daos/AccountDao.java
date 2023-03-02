@@ -13,6 +13,6 @@ public interface AccountDao {
     BigDecimal getAvailableBalance(int account_number);
     BigDecimal getCurrentBalance(int account_number);
     void updateAccount(Account account);
-    void deleteAccountByAccountNumber(String account_number);
+    void deleteAccountByAccountNumber(int account_number);
 
 }

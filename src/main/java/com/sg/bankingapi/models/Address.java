@@ -8,49 +8,16 @@ public class Address {
     private String City;
     private String State;
     private String zipcode;
-
-
-    public Address(int address_id) {
-        this.address_id = address_id;
-    }
-
-
-    public int getCustomer_number() {
-        return address_id;
-    }
-
-    public String getStreet() {
-        return Street;
-    }
-
-    public void setStreet(String street) {
-        Street = street;
-    }
-
-    public String getCity() {
-        return City;
-    }
-
-    public void setCity(String city) {
-        City = city;
-    }
-
-    public String getState() {
-        return State;
-    }
-
-    public void setState(String state) {
-        State = state;
-    }
-
-    public String getZipcode() {
-        return zipcode;
-    }
-
-    public void setZipcode(String zipcode) {
-        this.zipcode = zipcode;
-    }
-
+    public int getAddress_id() { return address_id; }
+    public void setAddress_id(int address_id) { this.address_id = address_id; }
+    public String getStreet() { return Street;  }
+    public void setStreet(String street) { Street = street; }
+    public String getCity() { return City; }
+    public void setCity(String city) { City = city; }
+    public String getState() { return State; }
+    public void setState(String state) { State = state; }
+    public String getZipcode() { return zipcode; }
+    public void setZipcode(String zipcode) { this.zipcode = zipcode; }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

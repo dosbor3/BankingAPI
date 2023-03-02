@@ -7,10 +7,10 @@ import java.util.List;
 public interface CustomerAddressDao {
     /**
      *
-     * @param cust_number
+     * @param address_id
      * @return
      */
-    Address getCustomerByAddress(int cust_number);
+    Address getAddressById(int address_id);
 
     /**
      *
@@ -37,12 +37,4 @@ public interface CustomerAddressDao {
      * @param address_id
      */
     void deleteAddressById(int address_id);
-
-    /**
-     *
-     * @param cust_id
-     * @return
-     */
-    List<Address> getAllAddressesForCustomer(int cust_id);
-
 }

@@ -5,12 +5,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+@Repository
 public class CustomerDaoDB implements CustomerDao{
 
     private final JdbcTemplate jdbc;
@@ -67,14 +69,15 @@ public class CustomerDaoDB implements CustomerDao{
     @Override
     public void updateCustomer(Customer customer) {
         final String UPDATE_CUSTOMER = "UPDATE Customer SET first_name = ?, last_name = ?, address_id = ?," +
-                "phone = ?, email = ?, isActive = ?";
+                "phone = ?, email = ?, isActive = ? WHERE customer_number = ?";
         jdbc.update(UPDATE_CUSTOMER,
                 customer.getFirst_name(),
                 customer.getLast_name(),
                 customer.getAddress(),
                 customer.getPhone(),
                 customer.getEmail_address(),
-                customer.isActive());
+                customer.isActive(),
+                customer.getCustomer_number());
 
     }
 

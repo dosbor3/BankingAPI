@@ -6,11 +6,10 @@ USE bankingapidb;
 
 CREATE TABLE Address (
 	address_id INT PRIMARY KEY AUTO_INCREMENT,
-    customer_number INT NOT NULL, 
 	street VARCHAR(75),
 	city VARCHAR(50),
 	state VARCHAR(25),
-	zip VARCHAR(12)    
+	zipcode VARCHAR(12)
 );
 
 CREATE TABLE Customer (
@@ -25,38 +24,33 @@ CREATE TABLE Customer (
 		REFERENCES Address(address_id)
 );
 
-CREATE TABLE AccountType (
-	account_type_id INT PRIMARY KEY AUTO_INCREMENT,
-    account_type VARCHAR(50),
-    account_description VARCHAR(150)
-);
-
 CREATE TABLE Account (
-	account_number INT PRIMARY KEY AUTO_INCREMENT,
-    customer_number INT NOT NULL, 
+	account_number INT PRIMARY KEY AUTO_INCREMENT,    
+    customer_number INT,
     current_balance DOUBLE,
     available_balance DOUBLE,
-    account_type INT, 
+    account_category VARCHAR(50), 
     isActive BOOLEAN,
     FOREIGN KEY fk_Customer_Account (customer_number)
 		REFERENCES Customer(customer_number)
 );
 
-CREATE TABLE Transactions (
+CREATE TABLE Transaction (
 	 trans_id INT PRIMARY KEY AUTO_INCREMENT,
-     account_number INT NOT NULL,
-     customer_number INT NOT NULL,
-     account_type INT NOT NULL, 
+     trans_type INT, 
+     account_number INT NOT NULL,          
      trans_date DATETIME,
-	 deposit_amount DECIMAL,
-	 withdrawl_amount DECIMAL,
+	 amount DECIMAL,
      total DECIMAL,
      pending_flag BOOLEAN,
      FOREIGN KEY fk_Account_Transactions (account_number)
-		REFERENCES Account(account_number),
-     FOREIGN KEY fk_Customer_Transactions (customer_number)
-		REFERENCES Customer(customer_number),
-	FOREIGN KEY fk_AccountType_Transactions (account_type)
-		REFERENCES AccountType(account_type_id) 
+		REFERENCES Account(account_number)  	
 );
 
+CREATE TABLE Account_Customer(
+	account_number INT NOT NULL, 
+    customer_number INT NOT NULL, 
+    PRIMARY KEY(account_number, customer_number),
+    FOREIGN KEY (account_number) REFERENCES Account(account_number),
+    FOREIGN KEY (customer_number) REFERENCES Customer(customer_number)
+);

@@ -28,5 +28,4 @@ public class AccountController {
         model.addAttribute("accounts", accounts);
         return accounts;
     }
-//for tomorrow.. start reading Spring Boot with Thymeleaf to gain an understanding of
 }
