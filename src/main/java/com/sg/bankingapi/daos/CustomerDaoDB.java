@@ -100,7 +100,7 @@ public class CustomerDaoDB implements CustomerDao{
             customer.setCustomerNumber(rs.getInt("customer_number"));
             customer.setFirst_name(rs.getString("first_name"));
             customer.setLast_name(rs.getString("last_name"));
-            customer.setAddress(rs.getInt("address_id"));
+            customer.setAddress(rs.getString("address_id"));
             customer.setPhone(rs.getString("phone"));
             customer.setEmail_address(rs.getString("email"));
             customer.setActive(rs.getBoolean("isActive"));

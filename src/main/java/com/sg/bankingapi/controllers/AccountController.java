@@ -1,6 +1,7 @@
 package com.sg.bankingapi.controllers;
 
 import com.sg.bankingapi.daos.AccountDao;
+import com.sg.bankingapi.daos.CustomerDao;
 import com.sg.bankingapi.models.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -14,7 +15,10 @@ import java.util.*;
 @RequestMapping("/api")
 public class AccountController {
     private final String ACCOUNTS = "accounts";
+    @Autowired
     AccountDao accountDao;
+    @Autowired
+    CustomerDao customerDao;
 
 
     @Autowired
@@ -25,7 +29,7 @@ public class AccountController {
     @GetMapping(ACCOUNTS)
     public List displayAccounts(Model model) {
         List<Account> accounts = accountDao.getAllAccounts();
-        model.addAttribute("accounts", accounts);
+        model.addAttribute("index", accounts);
         return accounts;
     }
 }

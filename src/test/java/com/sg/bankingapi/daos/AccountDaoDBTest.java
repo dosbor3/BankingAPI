@@ -31,10 +31,7 @@ public class AccountDaoDBTest {
             accountDao.deleteAccountByAccountNumber(account.getAccount_number());
         }
 
-        List<Address> addresses = addressDao.getAllAddress();
-        for(Address address: addresses) {
-            addressDao.deleteAddressById(address.getAddress_id());
-        }
+
     }
 
     @Test

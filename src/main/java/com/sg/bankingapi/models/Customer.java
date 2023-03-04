@@ -9,7 +9,7 @@ public class Customer {
     //@NotBlank(message = "Last name must not be empty")
     //@Size(max = 50, message = "Last name must not exceed 50 characters")
     private String last_name;
-    private int address_id;
+    private String address;
     private String phone;
     private String email_address;
     private boolean isActive;
@@ -31,11 +31,11 @@ public class Customer {
     public void setLast_name(String last_name) {
         this.last_name = last_name;
     }
-    public int getAddress() {
-        return address_id;
+    public String getAddress() {
+        return address;
     }
-    public void setAddress(int address_id) {
-        this.address_id = address_id;
+    public void setAddress(String address_id) {
+        this.address = address_id;
     }
     public String getPhone() {
         return phone;
@@ -61,12 +61,12 @@ public class Customer {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Customer customer = (Customer) o;
-        return customer_number == customer.customer_number && address_id == customer.address_id && isActive == customer.isActive && Objects.equals(first_name, customer.first_name) && Objects.equals(last_name, customer.last_name) && Objects.equals(phone, customer.phone) && Objects.equals(email_address, customer.email_address);
+        return customer_number == customer.customer_number && address == customer.address && isActive == customer.isActive && Objects.equals(first_name, customer.first_name) && Objects.equals(last_name, customer.last_name) && Objects.equals(phone, customer.phone) && Objects.equals(email_address, customer.email_address);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(customer_number, first_name, last_name, address_id, phone, email_address, isActive);
+        return Objects.hash(customer_number, first_name, last_name, address, phone, email_address, isActive);
     }
 
     @Override
@@ -75,7 +75,7 @@ public class Customer {
                 "customer_number='" + customer_number + '\'' +
                 ", first_name='" + first_name + '\'' +
                 ", last_name='" + last_name + '\'' +
-                ", address=" + address_id +
+                ", address=" + address +
                 ", isActive=" + isActive +
                 ", phone='" + phone + '\'' +
                 ", email_address='" + email_address + '\'' +
