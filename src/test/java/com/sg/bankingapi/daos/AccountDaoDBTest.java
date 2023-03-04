@@ -9,15 +9,10 @@ import java.util.List;
 
 @SpringBootTest
 public class AccountDaoDBTest {
-
     @Autowired
     AccountDao accountDao;
-
     @Autowired
     CustomerDao customerDao;
-
-    @Autowired
-    AddressDao addressDao;
 
     @BeforeEach
     void setUp() {
@@ -30,26 +25,14 @@ public class AccountDaoDBTest {
         for(Account account: accounts) {
             accountDao.deleteAccountByAccountNumber(account.getAccount_number());
         }
-
-
     }
 
     @Test
     void testAddAndGetAccount() {
-        Address address = new Address();
-        address.setStreet("17339 Harvey Blvd");
-        address.setCity("Miami");
-        address.setState("Florida");
-        address.setZipcode("86753");
-        address = addressDao.addAddress(address);
-        Address addr_fromDao = addressDao.getAddressById(address.getAddress_id());
-        assertEquals(address, addr_fromDao);
-
-
         Customer customer = new Customer();
         customer.setFirst_name("Sheril");
         customer.setLast_name("Davis");
-        customer.setAddress(address.getAddress_id());
+        customer.setAddress("123 Leonard Lane");
         customer.setPhone(("555-555-5555"));
         customer.setEmail_address("someemail@some.com");
         customer.setActive(true);
@@ -74,24 +57,17 @@ public class AccountDaoDBTest {
 
     @Test
     void testGetAllAccounts() {
-        Address address = new Address();
-        address.setStreet("17339 Harvey Blvd");
-        address.setCity("Miami");
-        address.setState("Florida");
-        address.setZipcode("86753");
-        address = addressDao.addAddress(address);
-        Address addr_fromDao = addressDao.getAddressById(address.getAddress_id());
-
         Customer customer = new Customer();
         customer.setFirst_name("Sheril");
         customer.setLast_name("Davis");
-        customer.setAddress(address.getAddress_id());
+        customer.setAddress("123 Leonard Lane");
         customer.setPhone(("555-555-5555"));
         customer.setEmail_address("someemail@some.com");
         customer.setActive(true);
         customer = customerDao.addCustomer(customer);
         customer.setCustomerNumber(customer.getCustomer_number());
         Customer cust_fromDao = customerDao.getCustomerById(customer.getCustomer_number());
+        assertEquals(customer, cust_fromDao);
 
 
         Account account = new Account();
@@ -120,24 +96,17 @@ public class AccountDaoDBTest {
 
     @Test
     void testUpdateAccount() {
-        Address address = new Address();
-        address.setStreet("17339 Harvey Blvd");
-        address.setCity("Miami");
-        address.setState("Florida");
-        address.setZipcode("86753");
-        address = addressDao.addAddress(address);
-        Address addr_fromDao = addressDao.getAddressById(address.getAddress_id());
-
         Customer customer = new Customer();
         customer.setFirst_name("Sheril");
         customer.setLast_name("Davis");
-        customer.setAddress(address.getAddress_id());
+        customer.setAddress("123 Leonard Lane");
         customer.setPhone(("555-555-5555"));
         customer.setEmail_address("someemail@some.com");
         customer.setActive(true);
         customer = customerDao.addCustomer(customer);
         customer.setCustomerNumber(customer.getCustomer_number());
         Customer cust_fromDao = customerDao.getCustomerById(customer.getCustomer_number());
+        assertEquals(customer, cust_fromDao);
 
         Account account = new Account();
         account.setCustomer_number(customer.getCustomer_number());
@@ -153,7 +122,7 @@ public class AccountDaoDBTest {
         Customer customer2 = new Customer();
         customer2.setFirst_name("Johnny");
         customer2.setLast_name("Bravo");
-        customer2.setAddress(address.getAddress_id());
+        customer2.setAddress("824 Penny Drive");
         customer2.setPhone(("888-257-4789"));
         customer2.setEmail_address("shrek@bigBangTheory.com");
         customer2.setActive(false);
@@ -173,24 +142,17 @@ public class AccountDaoDBTest {
     }
     @Test
     void testDeleteAccountByAccountNumber() {
-        Address address = new Address();
-        address.setStreet("17339 Harvey Blvd");
-        address.setCity("Miami");
-        address.setState("Florida");
-        address.setZipcode("86753");
-        address = addressDao.addAddress(address);
-        Address addr_fromDao = addressDao.getAddressById(address.getAddress_id());
-
         Customer customer = new Customer();
         customer.setFirst_name("Sheril");
         customer.setLast_name("Davis");
-        customer.setAddress(address.getAddress_id());
+        customer.setAddress("123 Leonard Lane");
         customer.setPhone(("555-555-5555"));
         customer.setEmail_address("someemail@some.com");
         customer.setActive(true);
         customer = customerDao.addCustomer(customer);
         customer.setCustomerNumber(customer.getCustomer_number());
         Customer cust_fromDao = customerDao.getCustomerById(customer.getCustomer_number());
+        assertEquals(customer, cust_fromDao);
 
         Account account = new Account();
         account.setCustomer_number(customer.getCustomer_number());
