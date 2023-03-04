@@ -1,6 +1,5 @@
 package com.sg.bankingapi.daos;
 
-import com.sg.bankingapi.models.Address;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
