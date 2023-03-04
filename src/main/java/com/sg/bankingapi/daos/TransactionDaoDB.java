@@ -7,6 +7,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,10 +23,7 @@ public class TransactionDaoDB implements TransactionDao {
     public Transaction getTransactionById(int trans_id) {
         try {
             final String GET_TRANS_BY_ID = "SELECT * FROM Transaction WHERE trans_id = ?";
-            Transaction transaction = jdbc.queryForObject(GET_TRANS_BY_ID, new TransactionMapper(), trans_id);
-            //transaction.setAccount_number(getAllTransactionsByAccountNumber());
             return jdbc.queryForObject(GET_TRANS_BY_ID, new TransactionMapper(), trans_id);
-
         }catch (DataAccessException ex) {
             return null;
         }
@@ -38,6 +36,7 @@ public class TransactionDaoDB implements TransactionDao {
     }
 
     @Override
+    @Transactional
     public Transaction addTransaction(Transaction transaction) {
         final String INSERT_TRANSACTION = "INSERT INTO Transaction(trans_type, account_number, trans_date, amount, total, pending_flag)" +
                 "VALUES(?, ?, ?, ?, ?,?)";
@@ -69,27 +68,10 @@ public class TransactionDaoDB implements TransactionDao {
     }
 
     @Override
+    @Transactional
     public void deleteTransactionById(int trans_id) {
         final String DELETE_TRANSACTION = "DELETE FROM Transaction WHERE trans_id = ?";
         jdbc.update(DELETE_TRANSACTION, trans_id);
-    }
-
-    @Override
-    public List<Transaction> getAllTransactionsByAccountNumber(int account_number) {
-        final String GET_TRANS_BY_ACCT_NUMBER = "SELECT  * FROM  Transaction WHERE account_number = ?";
-        return jdbc.query(GET_TRANS_BY_ACCT_NUMBER, new TransactionMapper());
-    }
-
-    /**
-     * This method will return a list of all transactions for a given account based on the account_number variable
-     *
-     * @param customer_number@return a List of all transactions made by a given account
-     */
-    @Override
-    public List<Transaction> getAllTransactionsByCustomersNumber(int customer_number) {
-        final String SELECT_TRANSACTIONS_FOR_CUSTOMERS = "SELECT  t.* FROM transaction t "
-                + "JOIN on Traction_Customer ts ON  ts.transId = t.id WHERE ts.customerNo = ?";
-        return jdbc.query(SELECT_TRANSACTIONS_FOR_CUSTOMERS, new TransactionMapper(), customer_number);
     }
 
     public static final class TransactionMapper implements RowMapper<Transaction> {

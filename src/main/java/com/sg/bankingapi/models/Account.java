@@ -10,8 +10,10 @@ public class Account {
     private double available_balance;
     private int account_category;
     private boolean isActive;
-
+    private Customer customer;
     private List<Transaction> transations;
+
+
     public int getAccount_number() { return account_number; }
     public void setAccount_number(int account_number) { this.account_number = account_number; }
     public int getCustomer_number() { return customer_number; }
@@ -24,6 +26,8 @@ public class Account {
     public void setAccount_category(int account_category) { this.account_category = account_category; }
     public boolean isActive() { return isActive; }
     public void setActive(boolean active) { isActive = active; }
+    public Customer getCustomer() { return customer; }
+    public void setCustomer(Customer customer) { this.customer = customer;  }
     public List<Transaction> getTransations() { return transations;  }
     public void setTransations(List<Transaction> transations) { this.transations = transations;  }
 

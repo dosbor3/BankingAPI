@@ -85,6 +85,10 @@ public class CustomerDaoDB implements CustomerDao{
     @Override
     @Transactional
     public void deleteCustomerById(int cust_number) {
+        final String DELETE_TRANS_CUST = "DELETE FROM ts.* FROM Transaction_Customer cs "
+                +" JOIN  Transaction t ON ts.transId = t.trans_id WHERE c.customer_number = ?";
+        jdbc.update(DELETE_TRANS_CUST, cust_number);
+
         final String DELETE_ACCOUNT_OF_CUSTOMER = "DELETE FROM Account WHERE customer_number = ?";
         jdbc.update(DELETE_ACCOUNT_OF_CUSTOMER, cust_number);
 

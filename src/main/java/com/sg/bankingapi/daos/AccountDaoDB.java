@@ -1,6 +1,8 @@
 package com.sg.bankingapi.daos;
 
 import com.sg.bankingapi.models.Account;
+import com.sg.bankingapi.models.Customer;
+import com.sg.bankingapi.models.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.RowMapper;
@@ -14,24 +16,35 @@ import java.util.List;
 
 @Repository
 public class AccountDaoDB implements AccountDao {
-    //What happens if I place @Autowired here instead of with the constructor?
-    //Say, JdbcTemplate jdbc; and not pass into constructor???
+   @Autowired
+    private JdbcTemplate jdbc;
+   @Autowired
+   CustomerDao customerDao;
+   @Autowired
+   TransactionDao transactionDao;
 
-    private final JdbcTemplate jdbc;
-
-    @Autowired
-    public AccountDaoDB(JdbcTemplate jdbc) {
-        this.jdbc = jdbc;
-    }
     @Override
     public Account getAccountByAccountNumber(int account_number) {
         try {
-            final String GET_ACCT_BY_ACCT_NO = "SELECT * FROM Account WHERE account_number = ?";
-            return jdbc.queryForObject(GET_ACCT_BY_ACCT_NO, new AccountMapper(), account_number);
+            final String SELECT_ACCT_BY_ACCT_NO = "SELECT * FROM Account WHERE account_number = ?";
+            Account account = jdbc.queryForObject(SELECT_ACCT_BY_ACCT_NO, new AccountMapper(), account_number);
+            account.setCustomer(getCustomerForAccount(account_number));
+            account.setTransations(getTransactionsForAccount()); //Figure out a way to pass in acct no, instead of customer number, consider changing transaction customer table to include acct no instead of customer no
+            return jdbc.queryForObject(SELECT_ACCT_BY_ACCT_NO, new AccountMapper(), account_number);
 
         }catch (DataAccessException ex){
             return null;
         }
+    }
+    private Customer getCustomerForAccount(int acct_no) {
+        final String SELECT_CUSTOMER_FOR_ACCOUNT = "SELECT c.* FROM Customer c"
+                + "JOIN Accont a ON a.customer_number = c.customer_number WHERE a.account_number = ?";
+        return jdbc.queryForObject(SELECT_CUSTOMER_FOR_ACCOUNT, new CustomerDaoDB.CustomerMapper(), acct_no);
+    }
+    private List<Transaction> getTransactionsForAccount(int cust_no) {
+        final String SELECT_TRANSACTIONS_FOR_ACCOUNT = "SELECT  t.* FROM transaction t"
+        +" JOIN Transaction_Customer tc ON tc.transId = t.trans_id WHERE cs.customerNo = ?";
+        return jdbc.query(SELECT_TRANSACTIONS_FOR_ACCOUNT, new TransactionDaoDB.TransactionMapper(), cust_no);
     }
 
     @Override
@@ -71,18 +84,6 @@ public class AccountDaoDB implements AccountDao {
     }
 
     @Override
-    public Account getAvailableBalance(int account_number) {
-        final String GET_AVAIL_BAL = "SELECT * FROM Account WHERE account_number = ?";
-        return jdbc.queryForObject(GET_AVAIL_BAL, new AccountMapper(), account_number);
-    }
-
-    @Override
-    public Account getCurrentBalance(int account_number) {
-        final String GET_CURR_BAL = "SELECT * FROM Account WHERE account_number = ?";
-        return jdbc.queryForObject(GET_CURR_BAL, new AccountMapper(), account_number);
-    }
-
-    @Override
     public void updateAccount(Account account) {
         final String UPDATE_ACCOUNT = "UPDATE Account SET customer_number = ?, current_balance = ?, available_balance = ?, "
                 + "account_category = ?, isActive = ? " +
@@ -98,13 +99,18 @@ public class AccountDaoDB implements AccountDao {
     }
 
     @Override
-    @Transactional //future production setup
+    @Transactional
     public void deleteAccountByAccountNumber(int account_number) {
         final String DELETE_TRANSACTION = "DELETE FROM Transaction WHERE account_number = ?";
         jdbc.update(DELETE_TRANSACTION, account_number);
 
         final String DELETE_ACCOUNT = "DELETE FROM Account WHERE account_number = ?";
         jdbc.update(DELETE_ACCOUNT, account_number);
+    }
+
+    @Override
+    public List<Account> getAccountsForCustomer(int customer_no) {
+        return null;
     }
 
     public static class AccountMapper implements RowMapper<Account> {
