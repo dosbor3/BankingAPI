@@ -1,3 +1,4 @@
+//FUTURE DEVELOPMENT
 package com.sg.bankingapi.daos;
 
 import com.sg.bankingapi.models.Transaction;
@@ -7,22 +8,22 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+
 import java.util.List;
 
 @Repository
 public class TransactionDaoDB implements TransactionDao {
-    private final JdbcTemplate jdbc;
     @Autowired
-    public TransactionDaoDB(JdbcTemplate jdbc) { this.jdbc = jdbc; }
+    private JdbcTemplate jdbc;
+
     @Override
     public Transaction getTransactionById(int trans_id) {
         try {
             final String GET_TRANS_BY_ID = "SELECT * FROM Transaction WHERE trans_id = ?";
+            Transaction transaction = jdbc.queryForObject(GET_TRANS_BY_ID, new TransactionMapper(), trans_id);
+            //transaction.setAccount_number(getAllTransactionsByAccountNumber());
             return jdbc.queryForObject(GET_TRANS_BY_ID, new TransactionMapper(), trans_id);
 
         }catch (DataAccessException ex) {
@@ -37,49 +38,19 @@ public class TransactionDaoDB implements TransactionDao {
     }
 
     @Override
-    public List<Transaction> getAllTransactionsByAccountNumber(int account_number) {
-        final String GET_ALL_TRANS_FOR_ACCT = "SELECT * FROM Transaction WHERE account_number = ?";
-        return jdbc.query(GET_ALL_TRANS_FOR_ACCT, new TransactionMapper());
-    }
-
-    /**
-     * This method will return a List of ALL transactions made by the customer object with the specific customer_number
-     *
-     * @param customer_number@return, a List of all transactions made by a given customer
-     */
-    @Override
-    public List<Transaction> getAllTransactionsByCustomerNumber(int customer_number) {
-        return null;
-    }
-
-    /**
-     * This method will return a list of transactions made by a customer for a specific type of transaction based on the
-     * trans_type variable
-     *
-     * @param customer_number
-     * @param account_number
-     * @param trans_type
-     * @return List structure that holds a specific transaction type for a customer
-     */
-    @Override
-    public List<Transaction> getAllTransactionsTypeByCustomerNumber(int customer_number, int account_number, int trans_type) {
-        return null;
-    }
-
-    @Override
     public Transaction addTransaction(Transaction transaction) {
-        final String INSERT_TRANSACTION = "INSERT INTO Transaction(trans_type, account_number, trans_date, amount, total, pending_flag" +
-                "VALUES(?,?,?,?,?,?)";
+        final String INSERT_TRANSACTION = "INSERT INTO Transaction(trans_type, account_number, trans_date, amount, total, pending_flag)" +
+                "VALUES(?, ?, ?, ?, ?,?)";
         jdbc.update(INSERT_TRANSACTION,
                 transaction.getTrans_type(),
-                transaction.getAmount(),
+                transaction.getAccount_number(),
                 transaction.getTrans_date(),
                 transaction.getAmount(),
                 transaction.getTotal(),
                 transaction.getPending_flag());
-        int newId = jdbc.queryForObject("SELECT_LAST_INSERT_ID()", Integer.class);
-        transaction.setTrans_id(newId);
 
+        int newId = jdbc.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
+        transaction.setTrans_id(newId);
         return  transaction;
     }
 
@@ -98,10 +69,27 @@ public class TransactionDaoDB implements TransactionDao {
     }
 
     @Override
-    public void deleteTransaction(int trans_id) {
+    public void deleteTransactionById(int trans_id) {
         final String DELETE_TRANSACTION = "DELETE FROM Transaction WHERE trans_id = ?";
         jdbc.update(DELETE_TRANSACTION, trans_id);
+    }
 
+    @Override
+    public List<Transaction> getAllTransactionsByAccountNumber(int account_number) {
+        final String GET_TRANS_BY_ACCT_NUMBER = "SELECT  * FROM  Transaction WHERE account_number = ?";
+        return jdbc.query(GET_TRANS_BY_ACCT_NUMBER, new TransactionMapper());
+    }
+
+    /**
+     * This method will return a list of all transactions for a given account based on the account_number variable
+     *
+     * @param customer_number@return a List of all transactions made by a given account
+     */
+    @Override
+    public List<Transaction> getAllTransactionsByCustomersNumber(int customer_number) {
+        final String SELECT_TRANSACTIONS_FOR_CUSTOMERS = "SELECT  t.* FROM transaction t "
+                + "JOIN on Traction_Customer ts ON  ts.transId = t.id WHERE ts.customerNo = ?";
+        return jdbc.query(SELECT_TRANSACTIONS_FOR_CUSTOMERS, new TransactionMapper(), customer_number);
     }
 
     public static final class TransactionMapper implements RowMapper<Transaction> {
@@ -112,8 +100,8 @@ public class TransactionDaoDB implements TransactionDao {
             transaction.setTrans_type(rs.getInt("trans_type"));
             transaction.setAccount_number(rs.getInt("account_number"));
             transaction.setTrans_date((rs.getDate("trans_date").toLocalDate()));
-            transaction.setAmount((rs.getBigDecimal("amount")));
-            transaction.setTotal(rs.getBigDecimal("total"));
+            transaction.setAmount((rs.getDouble("amount")));
+            transaction.setTotal(rs.getDouble("total"));
             transaction.setPending_flag(rs.getBoolean("pending_flag"));
 
             return transaction;

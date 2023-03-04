@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -28,8 +27,7 @@ public class AccountDaoDB implements AccountDao {
     public Account getAccountByAccountNumber(int account_number) {
         try {
             final String GET_ACCT_BY_ACCT_NO = "SELECT * FROM Account WHERE account_number = ?";
-            Account account = jdbc.queryForObject(GET_ACCT_BY_ACCT_NO, new AccountMapper(), account_number);
-            return account;
+            return jdbc.queryForObject(GET_ACCT_BY_ACCT_NO, new AccountMapper(), account_number);
 
         }catch (DataAccessException ex){
             return null;

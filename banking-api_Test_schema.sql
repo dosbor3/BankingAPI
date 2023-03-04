@@ -46,12 +46,3 @@ CREATE TABLE Transaction (
      FOREIGN KEY fk_Account_Transactions (account_number)
 		REFERENCES Account(account_number)  	
 );
-
-CREATE TABLE Account_Customer(
-	account_number INT NOT NULL, 
-    customer_number INT NOT NULL, 
-    trans_type INT,
-    PRIMARY KEY(account_number, customer_number),
-    FOREIGN KEY (account_number) REFERENCES Account(account_number),
-    FOREIGN KEY (customer_number) REFERENCES Customer(customer_number)
-);
