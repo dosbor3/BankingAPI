@@ -30,16 +30,6 @@ public interface TransactionDao {
      * @param trans_id
      */
     void deleteTransactionById(int trans_id);
-
-    List<Transaction> getAllTransactionsByAccountNumber(int account_number);
-
-    /**
-     * This method will return a list of all transactions for a given account based on the account_number variable
-     *
-     * @param customer_number, a unique identifier for a spcific account object
-     * @return a List of all transactions made by a given account
-     */
-    List<Transaction> getAllTransactionsByCustomersNumber(int customer_number);
 }
 
 //todo 03/02/23 As of now, I have to complete the Transaction DB to match up with the database table,
