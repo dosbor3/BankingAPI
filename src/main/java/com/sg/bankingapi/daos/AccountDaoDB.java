@@ -27,24 +27,17 @@ public class AccountDaoDB implements AccountDao {
     public Account getAccountByAccountNumber(int account_number) {
         try {
             final String SELECT_ACCT_BY_ACCT_NO = "SELECT * FROM Account WHERE account_number = ?";
-            Account account = jdbc.queryForObject(SELECT_ACCT_BY_ACCT_NO, new AccountMapper(), account_number);
-            account.setCustomer(getCustomerForAccount(account_number));
-            account.setTransations(getTransactionsForAccount()); //Figure out a way to pass in acct no, instead of customer number, consider changing transaction customer table to include acct no instead of customer no
             return jdbc.queryForObject(SELECT_ACCT_BY_ACCT_NO, new AccountMapper(), account_number);
 
         }catch (DataAccessException ex){
             return null;
         }
     }
-    private Customer getCustomerForAccount(int acct_no) {
-        final String SELECT_CUSTOMER_FOR_ACCOUNT = "SELECT c.* FROM Customer c"
-                + "JOIN Accont a ON a.customer_number = c.customer_number WHERE a.account_number = ?";
-        return jdbc.queryForObject(SELECT_CUSTOMER_FOR_ACCOUNT, new CustomerDaoDB.CustomerMapper(), acct_no);
-    }
-    private List<Transaction> getTransactionsForAccount(int cust_no) {
+
+    private List<Transaction> getTransactionsForAccount(int acct_no) {
         final String SELECT_TRANSACTIONS_FOR_ACCOUNT = "SELECT  t.* FROM transaction t"
-        +" JOIN Transaction_Customer tc ON tc.transId = t.trans_id WHERE cs.customerNo = ?";
-        return jdbc.query(SELECT_TRANSACTIONS_FOR_ACCOUNT, new TransactionDaoDB.TransactionMapper(), cust_no);
+        +" JOIN Transaction_Account ta ON ta.transId = t.trans_id WHERE ta.accountNo = ?";
+        return jdbc.query(SELECT_TRANSACTIONS_FOR_ACCOUNT, new TransactionDaoDB.TransactionMapper(), acct_no);
     }
 
     @Override
@@ -101,18 +94,9 @@ public class AccountDaoDB implements AccountDao {
     @Override
     @Transactional
     public void deleteAccountByAccountNumber(int account_number) {
-        final String DELETE_TRANSACTION = "DELETE FROM Transaction WHERE account_number = ?";
-        jdbc.update(DELETE_TRANSACTION, account_number);
-
         final String DELETE_ACCOUNT = "DELETE FROM Account WHERE account_number = ?";
         jdbc.update(DELETE_ACCOUNT, account_number);
     }
-
-    @Override
-    public List<Account> getAccountsForCustomer(int customer_no) {
-        return null;
-    }
-
     public static class AccountMapper implements RowMapper<Account> {
         @Override
         public Account mapRow(ResultSet rs, int rowNum) throws SQLException, SQLException {

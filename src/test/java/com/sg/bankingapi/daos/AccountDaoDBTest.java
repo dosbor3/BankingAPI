@@ -146,7 +146,7 @@ public class AccountDaoDBTest {
         customer.setFirst_name("Sheril");
         customer.setLast_name("Davis");
         customer.setAddress("123 Leonard Lane");
-        customer.setPhone(("555-555-5555"));
+        customer.setPhone("555-555-5555");
         customer.setEmail_address("someemail@some.com");
         customer.setActive(true);
         customer = customerDao.addCustomer(customer);
@@ -170,10 +170,6 @@ public class AccountDaoDBTest {
         fromDao = accountDao.getAccountByAccountNumber(account.getAccount_number());
         assertNull(fromDao);
 
-        //todo remove alertDao and alertDaoImpl
-        //todo complete testing
-        //todo complete controllers
-        //research REACT
 
     }
 }

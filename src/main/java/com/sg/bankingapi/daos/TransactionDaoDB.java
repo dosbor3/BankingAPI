@@ -28,7 +28,6 @@ public class TransactionDaoDB implements TransactionDao {
             return null;
         }
     }
-
     @Override
     public List<Transaction> getAllTransactions() {
         final String GET_ALL_ACCT_TRANS = "SELECT * FROM Transaction";
@@ -38,11 +37,10 @@ public class TransactionDaoDB implements TransactionDao {
     @Override
     @Transactional
     public Transaction addTransaction(Transaction transaction) {
-        final String INSERT_TRANSACTION = "INSERT INTO Transaction(trans_type, account_number, trans_date, amount, total, pending_flag)" +
-                "VALUES(?, ?, ?, ?, ?,?)";
+        final String INSERT_TRANSACTION = "INSERT INTO Transaction(trans_type,  trans_date, amount, total, pending_flag)" +
+                "VALUES(?, ?, ?, ?, ?)";
         jdbc.update(INSERT_TRANSACTION,
                 transaction.getTrans_type(),
-                transaction.getAccount_number(),
                 transaction.getTrans_date(),
                 transaction.getAmount(),
                 transaction.getTotal(),
@@ -55,16 +53,15 @@ public class TransactionDaoDB implements TransactionDao {
 
     @Override
     public void updateTransaction(Transaction transaction) {
-        final String UPDATE_TRANSACTION = "UPDATE Transaction SET trans_type = ?, account_number = ?, trans_date = ?," +
+        final String UPDATE_TRANSACTION = "UPDATE Transaction SET trans_type = ?, trans_date = ?," +
                 " amount = ?, total = ?, pending_flag = ? WHERE trans_id = ?";
         jdbc.update(UPDATE_TRANSACTION,
-                transaction.getTrans_id(),
                 transaction.getTrans_type(),
-                transaction.getAccount_number(),
                 transaction.getTrans_date(),
                 transaction.getAmount(),
                 transaction.getTotal(),
-                transaction.getPending_flag());
+                transaction.getPending_flag(),
+                transaction.getTrans_id());
     }
 
     @Override
@@ -80,7 +77,6 @@ public class TransactionDaoDB implements TransactionDao {
             Transaction transaction = new Transaction();
             transaction.setTrans_id(rs.getInt("trans_id"));
             transaction.setTrans_type(rs.getInt("trans_type"));
-            transaction.setAccount_number(rs.getInt("account_number"));
             transaction.setTrans_date((rs.getDate("trans_date").toLocalDate()));
             transaction.setAmount((rs.getDouble("amount")));
             transaction.setTotal(rs.getDouble("total"));

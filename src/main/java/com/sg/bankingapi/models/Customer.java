@@ -61,7 +61,7 @@ public class Customer {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Customer customer = (Customer) o;
-        return customer_number == customer.customer_number && address == customer.address && isActive == customer.isActive && Objects.equals(first_name, customer.first_name) && Objects.equals(last_name, customer.last_name) && Objects.equals(phone, customer.phone) && Objects.equals(email_address, customer.email_address);
+        return customer_number == customer.customer_number && isActive == customer.isActive && Objects.equals(first_name, customer.first_name) && Objects.equals(last_name, customer.last_name) && Objects.equals(address, customer.address) && Objects.equals(phone, customer.phone) && Objects.equals(email_address, customer.email_address);
     }
 
     @Override

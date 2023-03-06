@@ -28,7 +28,6 @@ public class CustomerDaoDB implements CustomerDao{
         try {
             final String GET_CUST_BY_ID = "SELECT * FROM Customer WHERE customer_number = ?";
             return jdbc.queryForObject(GET_CUST_BY_ID, new CustomerMapper(), cust_number);
-
         }catch (DataAccessException ex) {
             return null;
         }
@@ -50,7 +49,7 @@ public class CustomerDaoDB implements CustomerDao{
     @Override
     @Transactional
     public Customer addCustomer(Customer customer) {
-        final String INSERT_CUSTOMER = "INSERT INTO Customer(first_name, last_name, address_id, phone, email, isActive)" +
+        final String INSERT_CUSTOMER = "INSERT INTO Customer(first_name, last_name, address, phone, email, isActive)" +
                 " VALUES(?,?,?,?,?,?)";
         jdbc.update(INSERT_CUSTOMER,
                 customer.getFirst_name(),
@@ -59,8 +58,8 @@ public class CustomerDaoDB implements CustomerDao{
                 customer.getPhone(),
                 customer.getEmail_address(),
                 customer.isActive());
-        int newNumber = jdbc.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
-        customer.setCustomerNumber(newNumber);
+        int newId = jdbc.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
+        customer.setCustomerNumber(newId);
         return customer;
     }
 
@@ -69,7 +68,7 @@ public class CustomerDaoDB implements CustomerDao{
      */
     @Override
     public void updateCustomer(Customer customer) {
-        final String UPDATE_CUSTOMER = "UPDATE Customer SET first_name = ?, last_name = ?, address_id = ?," +
+        final String UPDATE_CUSTOMER = "UPDATE Customer SET first_name = ?, last_name = ?, address = ?," +
                 "phone = ?, email = ?, isActive = ? WHERE customer_number = ?";
         jdbc.update(UPDATE_CUSTOMER,
                 customer.getFirst_name(),
@@ -79,16 +78,11 @@ public class CustomerDaoDB implements CustomerDao{
                 customer.getEmail_address(),
                 customer.isActive(),
                 customer.getCustomer_number());
-
     }
 
     @Override
     @Transactional
     public void deleteCustomerById(int cust_number) {
-        final String DELETE_TRANS_CUST = "DELETE FROM ts.* FROM Transaction_Customer cs "
-                +" JOIN  Transaction t ON ts.transId = t.trans_id WHERE c.customer_number = ?";
-        jdbc.update(DELETE_TRANS_CUST, cust_number);
-
         final String DELETE_ACCOUNT_OF_CUSTOMER = "DELETE FROM Account WHERE customer_number = ?";
         jdbc.update(DELETE_ACCOUNT_OF_CUSTOMER, cust_number);
 
@@ -101,10 +95,11 @@ public class CustomerDaoDB implements CustomerDao{
         @Override
         public Customer mapRow(ResultSet rs, int rowNum) throws SQLException {
             Customer customer = new Customer();
+
             customer.setCustomerNumber(rs.getInt("customer_number"));
             customer.setFirst_name(rs.getString("first_name"));
             customer.setLast_name(rs.getString("last_name"));
-            customer.setAddress(rs.getString("address_id"));
+            customer.setAddress(rs.getString("address"));
             customer.setPhone(rs.getString("phone"));
             customer.setEmail_address(rs.getString("email"));
             customer.setActive(rs.getBoolean("isActive"));

@@ -12,5 +12,5 @@ public interface AccountDao {
     Account addAccount(Account account);
     void updateAccount(Account account);
     void deleteAccountByAccountNumber(int account_number);
-    List<Account> getAccountsForCustomer(int customer_no);
+    Account getAccountByCustomerNumber(int customer_no);
 }
