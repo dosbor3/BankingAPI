@@ -1,5 +1,7 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -13,7 +15,7 @@
 <div class="container">
   <div class="row m-4">
     <div class="col text-center border border-dark">
-      <h1><a href="/" class="text-dark">Tipton Bank of Sheldon</a></h1>
+      <h1>Tipton Bank of Sheldon</h1>
     </div>
   </div>
   <div class="row m-4 border border-dark">
@@ -66,11 +68,11 @@
           </div>
         </div>
         <div class="form-group row">
-          <label for="email" class="col-3 col-form-label">
+          <label for="email_address" class="col-3 col-form-label">
             Email</label>
           <div class="col-9">
-            <input type="text" name="email"
-                   id="email" class="form-control"/>
+            <input type="text" name="email_address"
+                   id="email_address" class="form-control"/>
           </div>
         </div>
         <div class="form-group row">
@@ -104,11 +106,11 @@
         <tbody>
         <tr th:each="customer : ${customers}">
           <td th:text="${customer.customer_number}">Customer No.</td>
-          <td th:text="${customer.firstName}">Customer First Name</td>
+          <td th:text="${customer.first_name}">Customer First Name</td>
           <td th:text="${customer.last_name}">Customer Last Name</td>
           <td th:text="${customer.address}">Customer Address</td>
           <td th:text="${customer.phone}">Customer Phone</td>
-          <td th:text="${customer.email}">Customer Email</td>
+          <td th:text="${customer.email_address}">Customer Email</td>
           <td th:text="${customer.isActive}">Customer Active</td>
           <td><a href="#" th:href="@{/editCustomer(id=${customer.customer_number})}">Edit</a></td>
           <td><a href="#" th:href="@{/deleteCustomer(id=${customer.customer_number})}">Delete</a></td>

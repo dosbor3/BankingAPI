@@ -5,15 +5,15 @@ import com.sg.bankingapi.daos.CustomerDao;
 import com.sg.bankingapi.daos.TransactionDao;
 import com.sg.bankingapi.models.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
 import java.util.List;
 
-@Controller
+@RestController
 public class TransactionController {
     @Autowired
     CustomerDao customerDao;
