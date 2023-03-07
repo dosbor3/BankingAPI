@@ -41,15 +41,18 @@
                 <label for="trans_type" class="col-3 col-form-label">
                    Type</label>
                 <div class="col-9">
-                    <input type="text" name="trans_type"
-                           id="trans_type" class="form-control"/>
+                    <select class="custom-select d-block w-100" id="trans_type" required>
+                        <option value="">Choose...</option>
+                        <option>withdrawl</option>
+                        <option>deposit</option>
+                    </select>
                 </div>
             </div>
             <div class="form-group row">
                 <label for="trans_date" class="col-3 col-form-label">
                     Date</label>
                 <div class="col-9">
-                    <input type="text" name="trans_date"
+                    <input type="text" name="trans_date" placeholder="YYYY-MM-DD"
                            id="trans_date" class="form-control"/>
                 </div>
             </div>
@@ -72,10 +75,20 @@
             <div class="form-group row">
                 <label for="pending_flag" class="col-3 col-form-label">
                     Status</label>
-                <div class="col-9">
-                    <input type="text" name="pending_flag"
-                           id="pending_flag" class="form-control"/>
-                </div>
+
+                    <div class="custom-control custom-radio">
+                        <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" checked required>
+                        <label class="custom-control-label" for="credit">Credit card</label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                        <input id="debit" name="paymentMethod" type="radio" class="custom-control-input" required>
+                        <label class="custom-control-label" for="debit">Debit card</label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                        <input id="paypal" name="paymentMethod" type="radio" class="custom-control-input" required>
+                        <label class="custom-control-label" for="paypal">PayPal</label>
+                    </div>
+                
             </div>
             <button type="submit" class="btn btn-primary">Add Transaction</button>
         </form>
@@ -92,7 +105,7 @@
                 <th>Amount</th>
                 <th>Total</th>
                 <th>Status</th>
-                <th>Edit</th>
+                <th>View</th>
                 <th>Delete</th>
             </tr>
             </thead>
@@ -104,8 +117,8 @@
                 <td th:text="${transaction.amount}">Transaction Amount</td>
                 <td th:text="${transaction.total}">Transaction Total</td>
                 <td th:text="${transaction.pending_flag}">Transaction Status</td>
-                <td>Edit</td>
-                <td>Delete</td>
+                <td><a href="#" th:href="@{/viewTransaction(id=${transaction.trans_id})}">View</a></td>
+                <td><a href="#" th:href="@{/deleteTransaction(id=${transaction.trans_id})}">Delete</a></td>
             </tr>
             </tbody>
         </table>

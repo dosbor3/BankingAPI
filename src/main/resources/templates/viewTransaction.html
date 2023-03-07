@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+  <title>Customer Information</title>
+</head>
+<body>
+<div class="container">
+  <div class="row m-4">
+    <div class="col text-center border border-dark">
+      <h1>Account Transactions</h1>
+    </div>
+  </div>
+  <div class="row m-4 border border-dark">
+    <div class="col text-center m-3">
+      <a href="index.html" class="btn btn-outline-primary btn-lg">Home</a>
+    </div>
+    <div class="col text-center m-3">
+      <a href="customers.html" class="btn btn-outline-primary btn-lg">Customers</a>
+    </div>
+    <div class="col text-center m-3">
+      <a href="accounts.html" class="btn btn-outline-primary btn-lg">Account Overview</a>
+    </div>
+  </div>
+    <div class="row m-4 border border-dark">
+      <div class="col-3 text-center m-3">
+        <span class="h3">View Transaction</span>
+      </div>
+      <div class="col-7 text-center m-3">
+        <form action="viewTransaction" method="POST">
+          <div class="form-group row">
+            <label for="trans_id" class="col-3 col-form-label">
+              Transaction ID</label>
+            <div class="col-9">
+              <input type="text" name="trans_id" id="trans_id"
+                     class="form-control" th:value="${transaction.trans_id}"/>
+            </div>
+          </div>
+          <input type="hidden" name="id" th:value="${transaction.id}"/>
+          <button type="submit" class="btn btn-primary">View Transaction</button>
+        </form>
+      </div>
+    </div>
+
+  <div class="row m-4 border border-dark">
+    <div class="col text-center m-3">
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Type</th>
+          <th>Date</th>
+          <th>Amount</th>
+          <th>Total</th>
+          <th>Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="transaction : ${transactions}">
+          <td th:text="${transaction.trans_id}">Teacher ID</td>
+          <td th:text="${transaction.trans_type}">Transaction Type</td>
+          <td th:text="${transaction.trans_date}">Transaction Date</td>
+          <td th:text="${transaction.amount}">Transaction Amount</td>
+          <td th:text="${transaction.total}">Transaction Total</td>
+          <td th:text="${transaction.pending_flag}">Transaction Status</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+
+</body>
+</html>

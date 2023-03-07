@@ -46,4 +46,17 @@ public class TransactionController {
         transactionDao.addTransaction(transaction);
         return "redirect:/transactions";
     }
+
+    @GetMapping("deleteTransaction")
+    public String deleteTransaction(Integer trans_id) {
+        transactionDao.deleteTransactionById(trans_id);
+        return "redirect:/transactions";
+    }
+
+    @GetMapping("viewTransaction")
+    public String editTransaction(Integer id, Model model) {
+        Transaction transaction = transactionDao.getTransactionById(id);
+        model.addAttribute("transaction", transaction);
+        return "viewTransaction";
+    }
 }
